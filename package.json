@@ -1,19 +1,32 @@
 {
   "name": "webcodecs-audio-visualizer-starter",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
-  "description": "Zero-WASM browser audio visualizer toolkit: deterministic 1024-pt Radix-2 Hann FFT, offline WebCodecs H.264/AAC MP4 pattern, pure-JS 32-bit RGBA QuickTime MOV muxer, transparent GIF89a LZW encoder, and SVG soundwave generator.",
+  "description": "Zero-WASM browser audio visualizer toolkit: deterministic 1024-pt Radix-2 Hann FFT, WebCodecs MP4 AAC 0.0ms priming sync patcher (edts/elst + roll), EBML WebM duration patcher, pure-JS 32-bit RGBA QuickTime MOV muxer, transparent GIF89a LZW encoder, and Cricut-ready SVG soundwave generator.",
   "license": "MIT",
   "homepage": "https://audiovisualizeronline.com/",
+  "exports": {
+    "./audio-engine": "./src/audio-engine.js",
+    "./mp4-aac-priming-sync": "./src/mp4-aac-priming-sync.js",
+    "./webm-duration-patch": "./src/webm-duration-patch.js",
+    "./muxer-mov-png": "./src/muxer-mov-png.js",
+    "./muxer-gif": "./src/muxer-gif.js",
+    "./exporter-svg": "./src/exporter-svg.js"
+  },
   "scripts": {
     "test": "node --test test/*.test.mjs"
   },
   "keywords": [
     "webcodecs",
     "audio-visualizer",
+    "web-audio-api",
+    "mp4-muxer",
+    "aac-priming",
+    "ffmpeg",
     "fft",
     "quicktime-mov",
     "transparent-video",
+    "podcast-audiogram",
     "gif-encoder",
     "svg-waveform",
     "canvas"
