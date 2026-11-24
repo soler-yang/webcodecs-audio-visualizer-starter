@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WebCodecs Audio Visualizer Starter Demo</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #0f1115; color: #f3f5f8; display: grid; place-items: center; min-height: 100vh; padding: 24px; }
+    .card { max-width: 720px; width: 100%; background: #161922; border: 1px solid #262b38; border-radius: 14px; padding: 24px; }
+    canvas { width: 100%; height: auto; background: #0b0d12; border-radius: 10px; display: block; margin: 16px 0; }
+    a { color: #f59e0b; }
+    button { background: #f59e0b; color: #0f1115; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 700; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>WebCodecs Audio Visualizer Starter</h1>
+    <p>Deterministic 1024-pt Radix-2 Hann FFT + zero-WASM transparent MOV/GIF/SVG primitives powering <a href="https://audiovisualizeronline.com/">Audio Visualizer Online</a>.</p>
+    <canvas id="c" width="960" height="360"></canvas>
+    <button id="btn">Synthesize &amp; Render Frame Snapshot</button>
+  </main>
+  <script type="module">
+    import { analyzeAudioData } from "../src/audio-engine.js";
+    const canvas = document.getElementById("c");
+    const ctx = canvas.getContext("2d");
+    function renderDemo() {
+      const sr = 48000;
+      const mono = new Float32Array(sr * 2);
+      for (let i = 0; i < mono.length; i++) {
+        const t = i / sr;
+        mono[i] = Math.sin(2 * Math.PI * 110 * t) * 0.5 + Math.sin(2 * Math.PI * 440 * t) * 0.25 + Math.sin(2 * Math.PI * 1760 * t) * 0.15;
+      }
+      const analysis = analyzeAudioData(mono, sr, { fps: 30, barCount: 64 });
+      const bars = analysis.frames[15];
+      ctx.fillStyle = "#0b0d12";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const bw = canvas.width / bars.length;
+      bars.forEach((v, i) => {
+        const h = Math.max(8, v * 280);
+        ctx.fillStyle = i % 2 === 0 ? "#f59e0b" : "#22d3ee";
+        ctx.fillRect(i * bw + 3, canvas.height - h - 20, bw - 6, h);
+      });
+    }
+    document.getElementById("btn").addEventListener("click", renderDemo);
+    renderDemo();
+  </script>
+</body>
+</html>
